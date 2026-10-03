@@ -2,7 +2,7 @@
 
 :fire: Convex optimization for Ruby
 
-Supports Cbc, Clp, GLOP, GLPK, HiGHS, OSQP, and SCS
+Supports Cbc, Clp, GLOP, GLPK, Gurobi, HiGHS, OSQP, and SCS
 
 [![Build Status](https://github.com/ankane/opt/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/opt/actions)
 
@@ -22,9 +22,42 @@ Solver | LP | QP | MIP | License
 [Clp](https://github.com/ankane/clp-ruby) | ✓ | | | EPL-2.0
 [GLOP](https://github.com/ankane/or-tools-ruby) | ✓ | | | Apache-2.0
 [GLPK](https://github.com/ankane/glpk-ruby) | ✓ | | ✓ | GPL-3.0-or-later
+[Gurobi](https://www.gurobi.com/) | ✓ | ✓ | ✓ | Proprietary
 [HiGHS](https://github.com/ankane/highs-ruby) | ✓ | ✓ | ✓ | MIT
 [OSQP](https://github.com/ankane/osqp-ruby) | ✓ | ✓ | | Apache-2.0
 [SCS](https://github.com/ankane/scs-ruby) | ✓ | ✓ | | MIT
+
+### Gurobi
+
+Install Gurobi Optimizer and configure a valid license. The adapter uses Gurobi's
+[C API](https://docs.gurobi.com/projects/optimizer/en/current/reference/c.html)
+through Fiddle, without a separate Gurobi Ruby binding. Add Fiddle to your Gemfile
+(required on Ruby 4.0 and later):
+
+```ruby
+gem "fiddle", require: false
+```
+
+Set `GUROBI_HOME` to the platform directory of your installation, for example:
+
+```sh
+export GUROBI_HOME=/opt/gurobi1303/linux64
+```
+
+Alternatively, set `GUROBI_LIBRARY` to the full path of the Gurobi shared library
+(`.so`, `.dylib`, or `.dll`). It takes precedence over `GUROBI_HOME`. Libraries on
+the system library search path are also detected. Set these variables before the
+first solver lookup. `Opt.available_solvers` checks library availability; a valid
+license is required when solving.
+
+```ruby
+prob.solve(solver: :gurobi)
+```
+
+Gurobi supports LP, convex QP, and linear MIP through this adapter, including
+semi-continuous and semi-integer variables. Logging and time limits use the same
+`verbose:` and `time_limit:` options as other solvers. As with other adapters,
+variable values and the objective are returned only for an optimal solution.
 
 ## Getting Started
 
@@ -61,7 +94,7 @@ x1 = Opt::Integer.new(0.., "x1")
 x2 = Opt::Binary.new("x2")
 ```
 
-MIP with semi-continuous variables - *HiGHS only at the moment*
+MIP with semi-continuous variables - *HiGHS and Gurobi*
 
 ```ruby
 x1 = Opt::SemiContinuous.new(2.., "x1")
@@ -113,3 +146,11 @@ cd opt
 bundle install
 bundle exec rake test
 ```
+
+With Gurobi installed and licensed, run its tests separately:
+
+```sh
+bundle exec rake test:gurobi
+```
+
+The default test task does not require a Gurobi installation or license.

@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added support for Gurobi (LP, convex QP, and MIP)
+
 ## 0.3.1 (2026-07-09)
 
 - Added support for QP with SCS

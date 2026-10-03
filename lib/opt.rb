@@ -17,6 +17,7 @@ require_relative "opt/solvers/cbc_solver"
 require_relative "opt/solvers/clp_solver"
 require_relative "opt/solvers/glop_solver"
 require_relative "opt/solvers/glpk_solver"
+require_relative "opt/solvers/gurobi_solver"
 require_relative "opt/solvers/highs_solver"
 require_relative "opt/solvers/osqp_solver"
 require_relative "opt/solvers/scs_solver"
@@ -46,3 +47,4 @@ Opt.register_solver :glpk, Opt::Solvers::GlpkSolver
 Opt.register_solver :highs, Opt::Solvers::HighsSolver
 Opt.register_solver :osqp, Opt::Solvers::OsqpSolver
 Opt.register_solver :scs, Opt::Solvers::ScsSolver
+Opt.register_solver :gurobi, Opt::Solvers::GurobiSolver

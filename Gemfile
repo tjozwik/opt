@@ -4,6 +4,7 @@ gemspec
 
 gem "rake"
 gem "minitest"
+gem "fiddle", require: false
 
 # solvers
 gem "cbc"

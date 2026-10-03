@@ -3,7 +3,7 @@ require "rake/testtask"
 
 SOLVERS = %w(cbc clp glop glpk highs osqp scs)
 
-SOLVERS.each do |solver|
+(SOLVERS + ["gurobi"]).each do |solver|
   namespace :test do
     task("env:#{solver}") { ENV["SOLVER"] = solver }
 
